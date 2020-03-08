@@ -1,0 +1,985 @@
+import React, {Component} from 'react';
+import PropTypes from "prop-types";
+import {StyleSheet, Text, View, TextInput, FlatList, Picker, ScrollView, TouchableHighlight} from 'react-native';
+import {Image as ReactImage} from 'react-native';
+import Svg, {Defs, Pattern} from 'react-native-svg';
+import {Path as SvgPath} from 'react-native-svg';
+import {Text as SvgText} from 'react-native-svg';
+import {Image as SvgImage} from 'react-native-svg';
+
+export default class FingerprintLogin extends Component {
+
+  constructor(props) {
+      super(props);
+      this.state = {
+          
+      };
+  }
+
+
+  handlePress(target, owner) {
+    if (this.props.onPress) {
+        let name;
+        let id;
+        let index = -1;
+        if (target.search("::") > -1) {
+            const varCount = target.split("::").length;
+            if (varCount === 2) {
+                name = target.split("::")[0];
+                id = target.split("::")[1];
+            } else if (varCount === 3) {
+                name = target.split("::")[0];
+                index = parseInt(target.split("::")[1]);
+                id = target.split("::")[2];
+            }
+        } else {
+            name = target;
+        }
+        this.props.onPress({ type: 'button', name: name, index: index, id: id, owner: owner });
+    }
+  }
+
+  handleChangeTextinput(name, value) {
+      let id;
+      let index = -1;
+      if (name.search('::') > -1) {
+          const varCount = name.split("::").length;
+          if (varCount === 2) {
+              name = name.split("::")[0];
+              id = name.split("::")[1];
+          } else if (varCount === 3) {
+              name = name.split("::")[0];
+              index = name.split("::")[1];
+              id = name.split("::")[2];
+          }
+      } else {
+          name = name;
+      }
+      let state = this.state;
+      state[name.split('::').join('')] = value;
+      this.setState(state, () => {
+          if (this.props.onChange) {
+              this.props.onChange({ type: 'textinput', name: name, value: value, index: index, id: id });
+          }
+      });
+  }
+
+  render() {
+    
+    return (
+    <ScrollView data-layer="8e8708c2-0799-4808-a341-0bc35938d96e" style={styles.fingerprintLogin}>
+        <View data-layer="726606e9-7024-4794-a1a5-3f8780acc409" style={styles.fingerprintLogin_statusbar}>
+            <View data-layer="3f78a114-ef6e-4981-8679-656b81f87dae" style={styles.fingerprintLogin_statusbar_group1}>
+                <View data-layer="4e026ae0-3028-4233-96c4-101bdc7feced" style={styles.fingerprintLogin_statusbar_group1_rectangle1}></View>
+                <Svg data-layer="43b5a957-ce27-4076-b8a9-aa722f003835" style={styles.fingerprintLogin_statusbar_group1_path1} preserveAspectRatio="none" viewBox="23 4 1.32806396484375 4" fill="rgba(255, 255, 255, 1)"><SvgPath d="M 23 4 L 23 8 C 23.80473136901855 7.661223411560059 24.32803726196289 6.873133182525635 24.32803726196289 6 C 24.32803726196289 5.126866817474365 23.80473136901855 4.338776588439941 23 4"  /></Svg>
+                <View data-layer="ada18b67-cea9-4f99-a7bd-0830bb508e5d" style={styles.fingerprintLogin_statusbar_group1_rectangle2}></View>
+            </View>
+            <Svg data-layer="49678d25-f66d-4fbb-8606-5c3b494b9b77" style={styles.fingerprintLogin_statusbar_path2} preserveAspectRatio="none" viewBox="272.6666564941406 4.330672264099121 37.2994384765625 11.002685546875" fill="rgba(255, 255, 255, 1)"><SvgPath d="M 302.330322265625 6.607999801635742 C 304.5462341308594 6.608097076416016 306.6773986816406 7.459534645080566 308.2833251953125 8.986332893371582 C 308.4042663574219 9.104207992553711 308.5975646972656 9.102721214294434 308.7166748046875 8.982999801635742 L 309.8726806640625 7.816333293914795 C 309.9329833984375 7.755610942840576 309.9666137695312 7.673359394073486 309.9660949707031 7.58777904510498 C 309.9656066894531 7.502198696136475 309.9309997558594 7.420345783233643 309.8699951171875 7.360333442687988 C 305.6549072265625 3.320785760879517 299.0050964355469 3.320785760879517 294.7900085449219 7.360333442687988 C 294.7289428710938 7.42030143737793 294.6943054199219 7.502129554748535 294.6937255859375 7.587709903717041 C 294.6931762695312 7.673290252685547 294.7267456054688 7.755567073822021 294.7869873046875 7.816333293914795 L 295.9433288574219 8.982999801635742 C 296.0623474121094 9.102901458740234 296.2557983398438 9.104390144348145 296.3766784667969 8.986332893371582 C 297.9828186035156 7.459434509277344 300.1142272949219 6.607994556427002 302.330322265625 6.607999801635742 Z M 302.330322265625 10.40366649627686 C 303.5478210449219 10.40359210968018 304.7218627929688 10.85612487792969 305.6243286132812 11.67333316802979 C 305.7463989257812 11.78931427001953 305.9386901855469 11.78679943084717 306.0576782226562 11.6676664352417 L 307.2123413085938 10.50100040435791 C 307.2731323242188 10.43980503082275 307.306884765625 10.35678863525391 307.3059997558594 10.27052402496338 C 307.3051147460938 10.18425941467285 307.2697143554688 10.1019458770752 307.2076721191406 10.04199981689453 C 304.45947265625 7.485617637634277 300.2035217285156 7.485617637634277 297.455322265625 10.04199981689453 C 297.3932495117188 10.10194492340088 297.3578491210938 10.18429946899414 297.3570251464844 10.27059268951416 C 297.356201171875 10.35688495635986 297.3900756835938 10.43989372253418 297.4509887695312 10.50100040435791 L 298.6053466796875 11.6676664352417 C 298.7243347167969 11.78679943084717 298.9165954589844 11.78931427001953 299.0386657714844 11.67333316802979 C 299.9405517578125 10.85666465759277 301.1136474609375 10.40417098999023 302.330322265625 10.40366649627686 Z M 304.5493469238281 13.1879997253418 C 304.611083984375 13.12739372253418 304.6450805664062 13.0439920425415 304.6433410644531 12.95748519897461 C 304.6415710449219 12.87097835540771 304.6041870117188 12.78903388977051 304.5400085449219 12.73099994659424 C 303.2644348144531 11.65211582183838 301.396240234375 11.65211582183838 300.1206665039062 12.73099994659424 C 300.0564575195312 12.788987159729 300.0190124511719 12.87090587615967 300.0171813964844 12.95741271972656 C 300.0153503417969 13.04392051696777 300.0492858886719 13.12734889984131 300.1109924316406 13.1879997253418 L 302.1086730957031 15.20366668701172 C 302.1672058105469 15.26290607452393 302.2470397949219 15.29624462127686 302.330322265625 15.29624462127686 C 302.4136352539062 15.29624462127686 302.4934387207031 15.26290607452393 302.552001953125 15.20366668701172 L 304.5493469238281 13.1879997253418 Z M 273.6666564941406 11.33333301544189 L 274.6666564941406 11.33333301544189 C 275.2189636230469 11.33333301544189 275.6666564941406 11.78104877471924 275.6666564941406 12.33333301544189 L 275.6666564941406 14.33333301544189 C 275.6666564941406 14.88561820983887 275.2189636230469 15.33333301544189 274.6666564941406 15.33333301544189 L 273.6666564941406 15.33333301544189 C 273.1143798828125 15.33333301544189 272.6666564941406 14.88561820983887 272.6666564941406 14.33333301544189 L 272.6666564941406 12.33333301544189 C 272.6666564941406 11.78104877471924 273.1143798828125 11.33333301544189 273.6666564941406 11.33333301544189 Z M 278.3333435058594 9.333333015441895 L 279.3333435058594 9.333333015441895 C 279.8856201171875 9.333333015441895 280.3333435058594 9.781048774719238 280.3333435058594 10.33333301544189 L 280.3333435058594 14.33333301544189 C 280.3333435058594 14.88561820983887 279.8856201171875 15.33333301544189 279.3333435058594 15.33333301544189 L 278.3333435058594 15.33333301544189 C 277.7810363769531 15.33333301544189 277.3333435058594 14.88561820983887 277.3333435058594 14.33333301544189 L 277.3333435058594 10.33333301544189 C 277.3333435058594 9.781048774719238 277.7810363769531 9.333333015441895 278.3333435058594 9.333333015441895 Z M 283 7 L 284 7 C 284.5522766113281 7 285 7.447715282440186 285 8 L 285 14.33333301544189 C 285 14.88561820983887 284.5522766113281 15.33333301544189 284 15.33333301544189 L 283 15.33333301544189 C 282.4477233886719 15.33333301544189 282 14.88561820983887 282 14.33333301544189 L 282 8 C 282 7.447715282440186 282.4477233886719 7 283 7 Z M 287.6666564941406 4.666666507720947 L 288.6666564941406 4.666666507720947 C 289.2189636230469 4.666666507720947 289.6666564941406 5.114381790161133 289.6666564941406 5.666666507720947 L 289.6666564941406 14.33333301544189 C 289.6666564941406 14.88561820983887 289.2189636230469 15.33333301544189 288.6666564941406 15.33333301544189 L 287.6666564941406 15.33333301544189 C 287.1143798828125 15.33333301544189 286.6666564941406 14.88561820983887 286.6666564941406 14.33333301544189 L 286.6666564941406 5.666666507720947 C 286.6666564941406 5.114381790161133 287.1143798828125 4.666666507720947 287.6666564941406 4.666666507720947 Z"  /></Svg>
+            <Text data-layer="6803745f-02f1-4143-8b87-316976ce8ed2" style={styles.fingerprintLogin_statusbar_x941}>9:41</Text>
+        </View>
+        <View data-layer="f8b7f9fb-881d-45b3-bde8-984462fb5aea" style={styles.fingerprintLogin_form}>
+            <View data-layer="851d9917-057a-4e17-8445-497465c214df" style={styles.fingerprintLogin_form_input551f9eb3}>
+                <View data-layer="d07fb3c2-b100-4d15-9819-84f96fadf883" style={styles.fingerprintLogin_form_input551f9eb3_rectangle45192365e}></View>
+                <Text data-layer="bf46678b-16b1-4bd8-9cd9-fea82d0231c8" style={styles.fingerprintLogin_form_input551f9eb3_example}>example@email.com</Text>
+                <Svg data-layer="ae2f8b10-3f32-4a4d-8ebb-89182128a7c9" style={styles.fingerprintLogin_form_input551f9eb3_user} preserveAspectRatio="none" viewBox="0 5 19.9735107421875 19.9736328125" fill="rgba(250, 152, 58, 1)"><SvgPath d="M 13.48214054107666 17.31700325012207 C 15.39626502990723 16.1518669128418 16.64459228515625 14.07132339477539 16.64459228515625 11.65785980224609 C 16.64463043212891 7.996031284332275 13.64856052398682 5 9.986770629882812 5 C 6.324980735778809 5 3.32891058921814 7.996031284332275 3.32891058921814 11.65785980224609 C 3.32891058921814 14.07132339477539 4.577237129211426 16.15190696716309 6.49136209487915 17.31700325012207 C 3.162451267242432 18.56536865234375 0.6657587289810181 21.47817039489746 0 24.97354125976562 L 1.664474725723267 24.97354125976562 C 2.496692657470703 21.14529228210449 5.908871650695801 18.31568145751953 9.986770629882812 18.31568145751953 C 14.06466960906982 18.31568145751953 17.47684860229492 21.1452522277832 18.30906677246094 24.97354125976562 L 19.97354125976562 24.97354125976562 C 19.30778121948242 21.39494132995605 16.81108856201172 18.48213958740234 13.48214054107666 17.31700325012207 Z M 4.993385314941406 11.65785980224609 C 4.993385314941406 8.911517143249512 7.24042797088623 6.664474487304688 9.986770629882812 6.664474487304688 C 12.73311233520508 6.664474487304688 14.98015594482422 8.911517143249512 14.98015594482422 11.65785980224609 C 14.98015594482422 14.40420246124268 12.73311233520508 16.6512451171875 9.986770629882812 16.6512451171875 C 7.24042797088623 16.6512451171875 4.993385314941406 14.40420246124268 4.993385314941406 11.65785980224609 Z"  /></Svg>
+            </View>
+            <View data-layer="3160e8bd-92d8-45d6-824f-bde66231f4ef" style={styles.fingerprintLogin_form_input}>
+                <View data-layer="31299605-74fd-49fc-97d6-c457485013fc" style={styles.fingerprintLogin_form_input_rectangle4}></View>
+                <View data-layer="f24c1958-3775-43e2-a69f-6c9703ec7515" style={styles.fingerprintLogin_form_input_rectangle5}></View>
+                <View data-layer="5b158307-ffae-4f8b-9bbb-8a7128bbd0bf" style={styles.fingerprintLogin_form_input_rectangle8}></View>
+                <View data-layer="9252a522-0ee9-4c8d-9839-8367d15a917d" style={styles.fingerprintLogin_form_input_rectangle10}></View>
+                <View data-layer="4eb4fd89-989c-4587-9f09-e74db8674105" style={styles.fingerprintLogin_form_input_rectangle6}></View>
+                <View data-layer="357be69b-7bcc-4513-90ed-a5e4f2be2fa3" style={styles.fingerprintLogin_form_input_rectangle7}></View>
+                <View data-layer="2c395c5d-d904-44cd-8e22-6ddabe780dbf" style={styles.fingerprintLogin_form_input_rectangle9}></View>
+                <Svg data-layer="a37916b8-152f-4361-a3b9-21f408f82fa6" style={styles.fingerprintLogin_form_input_lock} preserveAspectRatio="none" viewBox="0.016326529905200005 2.842170943040401e-14 15.15924072265625 20" fill="rgba(250, 152, 58, 1)"><SvgPath d="M 13.86122417449951 7.604081630706787 L 13.12653064727783 7.604081630706787 L 13.12653064727783 5.538775444030762 C 13.12653064727783 2.485714197158813 10.64489841461182 2.842170943040401e-14 7.591836929321289 2.842170943040401e-14 C 4.538775444030762 2.842170943040401e-14 2.057142972946167 2.485714197158813 2.057142972946167 5.534693717956543 L 2.057142972946167 7.599999904632568 L 1.326530575752258 7.599999904632568 C 0.6040816307067871 7.599999904632568 0.0163265299052 8.18775463104248 0.0163265299052 8.91020393371582 L 0.0163265299052 18.68979644775391 C 0.0163265299052 19.41224479675293 0.6040816307067871 20 1.326530575752258 20 L 13.86530590057373 20 C 14.58775520324707 20 15.17551040649414 19.41224479675293 15.17551040649414 18.68979644775391 L 15.17551040649414 8.91020393371582 C 15.17142868041992 8.191836357116699 14.58367347717285 7.604081630706787 13.86122417449951 7.604081630706787 Z M 3.722449064254761 5.534693717956543 C 3.722449064254761 3.400000095367432 5.45714282989502 1.665306091308594 7.591836929321289 1.665306091308594 C 9.726531028747559 1.665306091308594 11.46122455596924 3.400000095367432 11.46122455596924 5.534693717956543 L 11.46122455596924 7.59591817855835 L 3.722449064254761 7.59591817855835 L 3.722449064254761 5.534693717956543 Z M 13.50204086303711 18.33469390869141 L 1.6816326379776 18.33469390869141 L 1.6816326379776 9.269388198852539 L 13.50612258911133 9.269388198852539 L 13.50612258911133 18.33469390869141 L 13.50204086303711 18.33469390869141 Z"  /></Svg>
+            </View>
+            <Text data-layer="af239022-b89f-490c-9fc7-907587731f7f" style={styles.fingerprintLogin_form_signIn9c884164}>Sign in</Text>
+        </View>
+        <View data-layer="0be5da8d-4ebf-4276-a149-675862d9726d" style={styles.fingerprintLogin_group2}>
+            <View data-layer="89a92696-fe89-46aa-85a7-ce2cd55548f5" style={styles.fingerprintLogin_group2_or0d91d7af}>
+                <Text data-layer="de3bb1d5-55ce-413a-8e27-09c3092ad599" style={styles.fingerprintLogin_group2_or0d91d7af_or}>OR</Text>
+                <Svg data-layer="f5aed295-d139-420e-b17a-2589a7796f44" style={styles.fingerprintLogin_group2_or0d91d7af_line} preserveAspectRatio="none" viewBox="-0.5268408060073853 -0.5 38.89495849609375 3" fill="transparent"><SvgPath d="M 36.86811447143555 1 L 0.9731591939926147 1"  /></Svg>
+                <Svg data-layer="c122bd16-5630-4548-a6a6-9abfed895d51" style={styles.fingerprintLogin_group2_or0d91d7af_lineCopy} preserveAspectRatio="none" viewBox="-0.5268408060073853 -0.5 38.89495849609375 3" fill="transparent"><SvgPath d="M 36.86811447143555 1 L 0.9731591939926147 1"  /></Svg>
+            </View>
+            <View data-layer="38e817ff-1990-4d41-a54b-dc90abc49763" style={styles.fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f}>
+                <View data-layer="e9eccb2c-d525-4cbd-9dbb-9ca3545ebfaa" style={styles.fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_bge7906bfb}></View>
+                <ReactImage data-layer="e72fa403-7b45-4e0b-babc-2bf629558309" source={require('./assets/buttonroundedlargeiconLeft.png')} style={styles.fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft} />
+            </View>
+        </View>
+        <View data-layer="cf492fda-90b0-4e1d-91aa-91d85f2596c4" style={styles.fingerprintLogin_btn}>
+            <View data-layer="3398d548-13cd-4e7e-a5d7-ae09b3540476" style={styles.fingerprintLogin_btn_rectangle12}></View>
+            <Text data-layer="9a567e47-e2a1-45ad-9edf-d003264c1884" style={styles.fingerprintLogin_btn_signIn}>SIGN IN</Text>
+        </View>
+        <ReactImage data-layer="9099c446-2413-4e21-a389-badd70598ff3" source={require('./assets/giglendLogo1Project.png')} style={styles.fingerprintLogin_giglendLogo1Project} />
+        <ReactImage data-layer="9451e0b0-8f58-4235-9742-6ad9949d5ea4" source={require('./assets/icons8Fingerprint64.png')} style={styles.fingerprintLogin_icons8Fingerprint64} />
+    </ScrollView>
+    );
+  }
+}
+
+FingerprintLogin.propTypes = {
+
+}
+
+FingerprintLogin.defaultProps = {
+
+}
+
+
+const styles = StyleSheet.create({
+  "fingerprintLogin": {
+    "opacity": 1,
+    "position": "relative",
+    "backgroundColor": "rgba(0, 0, 0, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 375,
+    "height": 812,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_statusbar": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 327.03,
+    "height": 14.17,
+    "left": 24,
+    "top": 14.83
+  },
+  "fingerprintLogin_statusbar_group1": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 23.83,
+    "height": 10.33,
+    "left": 303.2,
+    "top": 0.5
+  },
+  "fingerprintLogin_statusbar_group1_rectangle1": {
+    "opacity": 0.3499999940395355,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopWidth": 1,
+    "borderTopColor": "rgba(255, 255, 255, 1)",
+    "borderRightWidth": 1,
+    "borderRightColor": "rgba(255, 255, 255, 1)",
+    "borderBottomWidth": 1,
+    "borderBottomColor": "rgba(255, 255, 255, 1)",
+    "borderLeftWidth": 1,
+    "borderLeftColor": "rgba(255, 255, 255, 1)",
+    "borderTopLeftRadius": 2.67,
+    "borderTopRightRadius": 2.67,
+    "borderBottomLeftRadius": 2.67,
+    "borderBottomRightRadius": 2.67,
+    "width": 20,
+    "height": 9.33,
+    "left": -0.5,
+    "top": -0.5
+  },
+  "fingerprintLogin_statusbar_group1_path1": {
+    "opacity": 0.4000000059604645,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 1.33,
+    "height": 4,
+    "left": 22.5,
+    "top": 3.17
+  },
+  "fingerprintLogin_statusbar_group1_rectangle2": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 1.33,
+    "borderTopRightRadius": 1.33,
+    "borderBottomLeftRadius": 1.33,
+    "borderBottomRightRadius": 1.33,
+    "width": 18,
+    "height": 7.33,
+    "left": 1.5,
+    "top": 1.5
+  },
+  "fingerprintLogin_statusbar_path2": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 37.3,
+    "height": 11,
+    "left": 260.36,
+    "top": 0
+  },
+  "fingerprintLogin_statusbar_x941": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "color": "rgba(255, 255, 255, 1)",
+    "fontSize": 14,
+    "fontWeight": "700",
+    "fontStyle": "normal",
+    "fontFamily": "SF Pro Text",
+    "textAlign": "left",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 26,
+    "height": 14,
+    "left": 0,
+    "top": 0.17
+  },
+  "fingerprintLogin_form": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 335,
+    "height": 207,
+    "left": 24,
+    "top": 226
+  },
+  "fingerprintLogin_form_input551f9eb3": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 335,
+    "height": 60,
+    "left": 0,
+    "top": 68
+  },
+  "fingerprintLogin_form_input551f9eb3_rectangle45192365e": {
+    "opacity": 0.20000000298023224,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopWidth": 1,
+    "borderTopColor": "rgba(112, 112, 112, 1)",
+    "borderRightWidth": 1,
+    "borderRightColor": "rgba(112, 112, 112, 1)",
+    "borderBottomWidth": 1,
+    "borderBottomColor": "rgba(112, 112, 112, 1)",
+    "borderLeftWidth": 1,
+    "borderLeftColor": "rgba(112, 112, 112, 1)",
+    "borderTopLeftRadius": 10,
+    "borderTopRightRadius": 10,
+    "borderBottomLeftRadius": 10,
+    "borderBottomRightRadius": 10,
+    "width": 335,
+    "height": 60,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_form_input551f9eb3_example": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "color": "rgba(255, 255, 255, 1)",
+    "fontSize": 18,
+    "fontWeight": "400",
+    "fontStyle": "normal",
+    "fontFamily": "Catamaran",
+    "textAlign": "left",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 153,
+    "height": 30,
+    "left": 59,
+    "top": 16
+  },
+  "fingerprintLogin_form_input551f9eb3_user": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 19.97,
+    "height": 19.97,
+    "left": 22,
+    "top": 21
+  },
+  "fingerprintLogin_form_input": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 335,
+    "height": 60,
+    "left": 0,
+    "top": 147
+  },
+  "fingerprintLogin_form_input_rectangle4": {
+    "opacity": 0.20000000298023224,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 10,
+    "borderTopRightRadius": 10,
+    "borderBottomLeftRadius": 10,
+    "borderBottomRightRadius": 10,
+    "width": 335,
+    "height": 60,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_form_input_rectangle5": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 111,
+    "borderTopRightRadius": 111,
+    "borderBottomLeftRadius": 111,
+    "borderBottomRightRadius": 111,
+    "width": 8,
+    "height": 8,
+    "left": 59,
+    "top": 28
+  },
+  "fingerprintLogin_form_input_rectangle8": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 111,
+    "borderTopRightRadius": 111,
+    "borderBottomLeftRadius": 111,
+    "borderBottomRightRadius": 111,
+    "width": 8,
+    "height": 8,
+    "left": 85,
+    "top": 28
+  },
+  "fingerprintLogin_form_input_rectangle10": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 111,
+    "borderTopRightRadius": 111,
+    "borderBottomLeftRadius": 111,
+    "borderBottomRightRadius": 111,
+    "width": 8,
+    "height": 8,
+    "left": 111,
+    "top": 28
+  },
+  "fingerprintLogin_form_input_rectangle6": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 111,
+    "borderTopRightRadius": 111,
+    "borderBottomLeftRadius": 111,
+    "borderBottomRightRadius": 111,
+    "width": 8,
+    "height": 8,
+    "left": 72,
+    "top": 28
+  },
+  "fingerprintLogin_form_input_rectangle7": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 111,
+    "borderTopRightRadius": 111,
+    "borderBottomLeftRadius": 111,
+    "borderBottomRightRadius": 111,
+    "width": 8,
+    "height": 8,
+    "left": 98,
+    "top": 28
+  },
+  "fingerprintLogin_form_input_rectangle9": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 111,
+    "borderTopRightRadius": 111,
+    "borderBottomLeftRadius": 111,
+    "borderBottomRightRadius": 111,
+    "width": 8,
+    "height": 8,
+    "left": 124,
+    "top": 28
+  },
+  "fingerprintLogin_form_input_lock": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 15.16,
+    "height": 20,
+    "left": 24,
+    "top": 22
+  },
+  "fingerprintLogin_form_signIn9c884164": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "color": "rgba(255, 255, 255, 1)",
+    "fontSize": 30,
+    "fontWeight": "700",
+    "fontStyle": "normal",
+    "fontFamily": "Catamaran",
+    "textAlign": "left",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 86,
+    "height": 49,
+    "left": 1,
+    "top": 0
+  },
+  "fingerprintLogin_group2": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 303,
+    "height": 82,
+    "left": 36,
+    "top": 569
+  },
+  "fingerprintLogin_group2_or0d91d7af": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 117.77,
+    "height": 9,
+    "left": 92.94,
+    "top": 0
+  },
+  "fingerprintLogin_group2_or0d91d7af_or": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "color": "rgba(255, 255, 255, 1)",
+    "fontSize": 7,
+    "fontWeight": "400",
+    "fontStyle": "normal",
+    "fontFamily": "Montserrat",
+    "textAlign": "center",
+    "lineHeight": 7,
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0.7000000000000001,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 12,
+    "height": 9,
+    "left": 51.06,
+    "top": 1
+  },
+  "fingerprintLogin_group2_or0d91d7af_line": {
+    "opacity": 0.30000001192092896,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 39.89,
+    "height": 4,
+    "left": -2,
+    "top": 1.67
+  },
+  "fingerprintLogin_group2_or0d91d7af_lineCopy": {
+    "opacity": 0.30000001192092896,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 39.89,
+    "height": 4,
+    "left": 79.88,
+    "top": 1.67
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 303,
+    "height": 49,
+    "left": 0,
+    "top": 33
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_bge7906bfb": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopWidth": 1,
+    "borderTopColor": "rgba(0, 0, 0, 0)",
+    "borderRightWidth": 1,
+    "borderRightColor": "rgba(0, 0, 0, 0)",
+    "borderBottomWidth": 1,
+    "borderBottomColor": "rgba(0, 0, 0, 0)",
+    "borderLeftWidth": 1,
+    "borderLeftColor": "rgba(0, 0, 0, 0)",
+    "borderTopLeftRadius": 100,
+    "borderTopRightRadius": 100,
+    "borderBottomLeftRadius": 100,
+    "borderBottomRightRadius": 100,
+    "width": 302,
+    "height": 48,
+    "left": -0.5,
+    "top": -0.5
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "width": 303,
+    "height": 49,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_colorglassDark": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 303,
+    "height": 49,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_colorglassDark_bg83b9997c": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 303,
+    "height": 49,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_colorglassDark_bg83b9997c_bg3bc04286": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "borderTopLeftRadius": 100,
+    "borderTopRightRadius": 100,
+    "borderBottomLeftRadius": 100,
+    "borderBottomRightRadius": 100,
+    "width": 302,
+    "height": 48,
+    "left": -0.5,
+    "top": -0.5
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_label": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 170.02,
+    "height": 15.63,
+    "left": 66.87,
+    "top": 16.43
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_label_buttonLabel": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "color": "rgba(255, 255, 255, 1)",
+    "fontSize": 9,
+    "fontWeight": "500",
+    "fontStyle": "normal",
+    "fontFamily": "Montserrat",
+    "textAlign": "center",
+    "lineHeight": 17,
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 154,
+    "height": 19,
+    "left": 0,
+    "top": -0.85
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_label_xIconsPlaceholder": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 7.28,
+    "height": 15.63,
+    "left": 162.74,
+    "top": 0
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_label_xIconsPlaceholder_shape": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 9.28,
+    "height": 17.63,
+    "left": -1,
+    "top": -1
+  },
+  "fingerprintLogin_group2_buttonroundedlargeiconLeft402afc1f_buttonroundedlargeiconLeft_bg": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopWidth": 1,
+    "borderTopColor": "rgba(0, 0, 0, 0)",
+    "borderRightWidth": 1,
+    "borderRightColor": "rgba(0, 0, 0, 0)",
+    "borderBottomWidth": 1,
+    "borderBottomColor": "rgba(0, 0, 0, 0)",
+    "borderLeftWidth": 1,
+    "borderLeftColor": "rgba(0, 0, 0, 0)",
+    "borderTopLeftRadius": 100,
+    "borderTopRightRadius": 100,
+    "borderBottomLeftRadius": 100,
+    "borderBottomRightRadius": 100,
+    "width": 302,
+    "height": 48,
+    "left": -0.5,
+    "top": -0.5
+  },
+  "fingerprintLogin_btn": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "transparent",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 335,
+    "height": 60,
+    "left": 20,
+    "top": 483
+  },
+  "fingerprintLogin_btn_rectangle12": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(250, 152, 58, 1)",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "borderTopLeftRadius": 10,
+    "borderTopRightRadius": 10,
+    "borderBottomLeftRadius": 10,
+    "borderBottomRightRadius": 10,
+    "width": 335,
+    "height": 60,
+    "left": 0,
+    "top": 0
+  },
+  "fingerprintLogin_btn_signIn": {
+    "opacity": 1,
+    "position": "absolute",
+    "backgroundColor": "rgba(255, 255, 255, 0)",
+    "color": "rgba(255, 255, 255, 1)",
+    "fontSize": 15,
+    "fontWeight": "700",
+    "fontStyle": "normal",
+    "fontFamily": "Catamaran",
+    "textAlign": "center",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "paddingTop": 0,
+    "paddingRight": 0,
+    "paddingBottom": 0,
+    "paddingLeft": 0,
+    "width": 60,
+    "height": 25,
+    "left": 132,
+    "top": 18
+  },
+  "fingerprintLogin_giglendLogo1Project": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "borderTopLeftRadius": 0,
+    "borderTopRightRadius": 0,
+    "borderBottomLeftRadius": 0,
+    "borderBottomRightRadius": 0,
+    "width": 200,
+    "height": 120,
+    "left": 88,
+    "top": 106
+  },
+  "fingerprintLogin_icons8Fingerprint64": {
+    "opacity": 1,
+    "position": "absolute",
+    "marginTop": 0,
+    "marginRight": 0,
+    "marginBottom": 0,
+    "marginLeft": 0,
+    "borderTopLeftRadius": 0,
+    "borderTopRightRadius": 0,
+    "borderBottomLeftRadius": 0,
+    "borderBottomRightRadius": 0,
+    "width": 83,
+    "height": 83,
+    "left": 146,
+    "top": 692
+  }
+});
