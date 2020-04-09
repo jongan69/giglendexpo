@@ -36,13 +36,6 @@ firebase.initializeApp(firebaseConfig);
 const AuthContext = React.createContext();
 
 
-function SplashScreen() {
-	return (
-		<View style={styles.container}>
-			<Text>Loading...</Text>
-		</View>
-	);
-}
 
 
 
