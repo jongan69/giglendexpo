@@ -21,6 +21,18 @@ import MainScreen from './components/mainScreen/mainScreen';
 import Login from './components/login/login';
 import SignUp from './components/signUp/signUp';
 
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+	apiKey: 'AIzaSyDBoDO2NXn0Z2VS3b_6kFy8jaRhxdNe5OA',
+	authDomain: 'gigapp-f7284.firebaseapp.com',
+	databaseURL: 'https://gigapp-f7284.firebaseio.com',
+	projectId: 'gigapp-f7284',
+	storageBucket: 'gigapp-f7284.appspot.com',
+};
+
+firebase.initializeApp(firebaseConfig);
+
 const AuthContext = React.createContext();
 
 
