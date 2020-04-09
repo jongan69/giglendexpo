@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
 		paddingRight: 0,
 		paddingBottom: 0,
 		paddingLeft: 0,
-		width: 153,
+		width: 180,
 		height: 30,
 		left: 59,
 		top: 16,
