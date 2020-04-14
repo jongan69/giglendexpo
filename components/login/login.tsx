@@ -138,7 +138,11 @@ export default class Login extends Component {
 					</View>
 					<View style={styles.login_form_input}>
 						<View style={styles.login_form_input_rectangle4} />
-						<TextInput style={styles.login_form_inputfd4a9a46_example}>
+
+						<TextInput
+							style={styles.login_form_inputfd4a9a46_example}
+							secureTextEntry={true}
+						>
 							Password
 						</TextInput>
 
@@ -160,11 +164,11 @@ export default class Login extends Component {
 					</Text>
 				</View>
 
-				<TouchableOpacity >
+				<TouchableOpacity>
 					<View style={styles.login_btn}>
-					<View style={styles.login_btn_rectangle12} />
-					<Text style={styles.login_btn_signIn}>SIGN IN</Text>
-				</View>
+						<View style={styles.login_btn_rectangle12} />
+						<Text style={styles.login_btn_signIn}>SIGN IN</Text>
+					</View>
 				</TouchableOpacity>
 			</ScrollView>
 		);
